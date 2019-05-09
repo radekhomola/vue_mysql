@@ -1,0 +1,55 @@
+<!doctype html>
+<html>
+
+<head>
+	<title>Získání rozvozů z databáze</title>
+	<script src="vue.js"></script>
+	<meta charset="utf-8">
+	<script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+</head>
+
+<body @load='allRecords()'>
+
+	<div id='getrozvozy'>
+		<table border='1' width='80%' style='border-collapse: collapse;'>
+			<tr>
+				<th>Misto</th>
+				<th>Latitude</th>
+				<th>Longtitude</th>
+			</tr>
+
+			<tr v-for='rozvoz in rozvozy_kde'>
+				<td>{{ rozvoz.misto }}</td>
+				<td>{{ rozvoz.latitude }}</td>
+				<td>{{ rozvoz.longtitude }}</td>
+			</tr>
+		</table>
+	</div>
+
+	<script>
+		var app = new Vue({
+			el: '#getrozvozy',
+			data: {
+				rozvozy_kde: "",
+			},
+			methods: {
+				getRozvozy: function () {
+
+					axios.get('getrozvozy.php')
+						.then(function (response) {
+							console.log(response.data);
+							app.rozvozy_kde = response.data;
+						})
+						.catch(function (error) {
+							console.log(error);
+						});
+				},
+			},
+			beforeMount() {
+				this.getRozvozy();
+			}
+		})
+	</script>
+</body>
+
+</html>
